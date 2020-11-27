@@ -33,6 +33,7 @@ public class CapGraph implements Graph {
 		integerNodeMap = new HashMap<Integer, Node>();
 	}
 	
+//	Add vertex method
 	@Override
 	public void addVertex(int num) {
 		Node node = integerNodeMap.get(num);
@@ -41,6 +42,7 @@ public class CapGraph implements Graph {
 		}
 	}
 
+	// Add edge to the node
 	@Override
 	public void addEdge(int from, int to) {
 		Node start = integerNodeMap.get(from);
@@ -53,6 +55,7 @@ public class CapGraph implements Graph {
 		start.addEdge(edge);
 	}
 
+	// return the egonet graph of a node
 	@Override
 	public CapGraph getEgonet(int center) {
 		CapGraph g = new CapGraph();
@@ -87,7 +90,8 @@ public class CapGraph implements Graph {
 //		System.out.println(g.getIntegerNodeMap().keySet().size());
 		return g;
 	}
-
+	
+	// return the scc's list(strong connected component)
 	@Override
 	public List<Graph> getSCCs() {
 		Set<Integer> nodes = getIntegerNodeMap().keySet();
@@ -111,7 +115,7 @@ public class CapGraph implements Graph {
 		return list;
 	}
 	
-	
+	// helper method
 	private void SCCUtil(CapGraph source, CapGraph g, Stack<Integer> vertices, List<Graph> list) {
 		HashSet<Integer> visited = new HashSet<Integer>();
 		Stack<Integer> finished = new Stack<Integer>();
@@ -129,6 +133,7 @@ public class CapGraph implements Graph {
 		
 	}
 
+	// helper method to create the graph from the vertex
 	private CapGraph createGraphFromVertex(CapGraph g, ArrayList<Integer> res) {
 		CapGraph graph = new CapGraph();
 		for(Integer i: res) {
@@ -146,6 +151,7 @@ public class CapGraph implements Graph {
 		return graph;
 	}
 
+	// helper method to transpose the graph
 	public CapGraph transpose(CapGraph graph) {
 		ArrayList<Integer> vertices = new ArrayList<>(graph.getIntegerNodeMap().keySet());
 		CapGraph g = new CapGraph();
@@ -170,6 +176,7 @@ public class CapGraph implements Graph {
 		return g;
 	}
 	
+	// DFS function
 	public Stack<Integer> DFS(CapGraph g, Stack<Integer> vertices){
 		HashSet<Integer> visited = new HashSet<Integer>();
 		Stack<Integer> finished = new Stack<Integer>();
@@ -185,6 +192,7 @@ public class CapGraph implements Graph {
 	}
 
 
+	// DFS_visit method to visit the depth nodes
 	private void DFS_VISIT(CapGraph g, Integer v, HashSet<Integer> visited, Stack<Integer> finished) {
 		visited.add(v);
 		ArrayList<Integer> neighbors = g.integerNodeMap.get(v).getNeighbors();
@@ -213,6 +221,7 @@ public class CapGraph implements Graph {
 		return res;
 	}
 	
+	// return the maximum SCC graph
 	public Graph getMaximumSCC() {
 		CapGraph maxSCC = null;
 		int max = 0;
@@ -228,12 +237,14 @@ public class CapGraph implements Graph {
 		return maxSCC; 
 	}
 	
+	// return the count of minimum broadcast users
 	public int getminimumBroadcastUsers() {
 		ArrayList<Integer> dominant = getBroadcastUsers();
 		return dominant.size();
 	}
 	
 	
+	// return the list of minimum broadcast users
 	public ArrayList<Integer> getBroadcastUsers() {
 		ArrayList<Integer> dominant = new ArrayList<Integer>();
 		
@@ -264,12 +275,13 @@ public class CapGraph implements Graph {
 		return dominant;
 	}
 	
+	// return the list of path form user1 to user2
 	public List<Integer> getMinimumUsersDifference(int user1, int user2){
-		List<Integer> res = dfs(user1, user2);
+		List<Integer> res = bfs(user1, user2);
 		return res;
 	}
 	
-	private List<Integer> dfs(int start, int end) {
+	private List<Integer> bfs(int start, int end) {
 		Set<Integer> visited = new HashSet<Integer>();
 		Queue<Integer>queue = new LinkedList<Integer>();
 		HashMap<Integer, Integer>parentMap = new HashMap<Integer, Integer>();
@@ -279,8 +291,9 @@ public class CapGraph implements Graph {
 		if(s == null || e == null) {
 			throw new IllegalArgumentException("Invalid Input values not exist");
 		}
-		boolean found = false;
+		System.out.println(s);
 		
+		boolean found = false;		
 		queue.add(start);
 		while(queue.size() != 0) {
 			int val = queue.poll();
@@ -319,7 +332,8 @@ public class CapGraph implements Graph {
 
 	public static void main(String[] args) {
 		CapGraph graph =  new CapGraph();
-		GraphLoader.loadGraph(graph, "data/twitter_combined_7000.txt");
+//		GraphLoader.loadGraph(graph, "data/twitter_combined_7000.txt");
+		GraphLoader.loadGraph(graph, "data/facebook_2000.txt");
 		
 		System.out.println("Original Graph");
 		System.out.println(graph.getIntegerNodeMap());
@@ -349,10 +363,10 @@ public class CapGraph implements Graph {
 		System.out.println("MaxSCC graph nodes: " + maxScc.getIntegerNodeMap().keySet());
 		
 		CapGraph graph2 = new CapGraph();
-		GraphLoader.loadGraph(graph2, "data/twitter_combined_7000.txt");
+		GraphLoader.loadGraph(graph2, "data/facebook_ucsd.txt");
 		System.out.println("\nMinimum Broadcast Users");
 		System.out.println("Total Users " + graph2.getIntegerNodeMap().keySet().size());
-		System.out.println("Total Relations or edges " + 7000);
+		System.out.println("Total Relations or edges " + 886442);
 //		for(Integer key: graph2.getIntegerNodeMap().keySet()) {
 //			System.out.println(key + " " + graph2.getIntegerNodeMap().get(key).getNeighbors() + " " + graph2.getIntegerNodeMap().get(key).getEdges().size());
 //		}
@@ -361,8 +375,9 @@ public class CapGraph implements Graph {
 
 		System.out.println("\nMinimum Distance between users ");
 		try {
-			System.out.println(graph2.getMinimumUsersDifference(153226312, 394263193));
-			System.out.println(graph2.getMinimumUsersDifference(153226312, 17627996));
+			System.out.println(graph2.getMinimumUsersDifference(8, 88));
+//			System.out.println(graph2.getMinimumUsersDifference(153226312, 394263193));
+//			System.out.println(graph2.getMinimumUsersDifference(153226312, 17627996));
 		}catch(Exception e) {
 			System.out.println(e.toString());
 		}
