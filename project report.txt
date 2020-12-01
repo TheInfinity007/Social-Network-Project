@@ -1,0 +1,41 @@
+1. Overview
+My project will be a porject based on social network like twitter, facebook, etc.
+It will be a broadcasting to a twitter network project.
+It will also measure the distance and path between the two users.
+2. Data
+I am using the facebook_ucsd dataset which is a graph contains facebook friendship between students at UCSD in 2005.
+Source:  https://archive.org/details/oxford-2005-facebook-matrix
+Contains 14947 nodes and 886442 edges between them
+3. Questions
+Find the maximum SCC from the graph
+Find minimum set of twitter users for announcements
+Find minumum distance and path between between two users.
+4. Algorithm, Data Structure and answer to the question
+    1. First :
+I have used the arraylist data structure. I already have the list of graph(SCC's). I just need to iterate through the SCC's and find the maximum SCC's Graph.
+    2. Second: 
+I have used arraylist and hashset data structures. 
+I have used the greedy algorithm.
+i have made a set of uncovered nodes and sorted them in decreasing order of their degrees.
+I then popped the nodes one by one starting from the highest degree and added it to the dominating set and removed all its neighbors from the uncovered set
+    3. Third
+I have used the bfs algo to find the shortest path between two users.
+I have used the set queue and hashmap data structure for this.
+The main purpose of hashmap is to help store the parent of each node, which will later help us to trace the path.
+5. Algorithm Analysis
+It takes O(n) compexity to iterate through the list of SCC's graph. So its overall complexity is O(n).
+It takes O(nLogn) for the uncovered set of nodes to sort. In parallel to this, a while loop runs on the size() of uncovered set which will make it O(n) and inside this loop there is another loop running which is iterating over the neighbors and removing them from the uncovered set, which takes the running time of no of neighbors but it is also removing the nodes from the uncovered set. This will make the complexity of the outer loop to less then O(n). From here we can say that is complexity is just above O(n).
+In the third algo, the complexity is  just due to the bfs algo. which is O(V+E).
+6. Correctness Verification(i.e. Testing)
+I have tested with the short data by taking care of the corner cases. But for a large data set manual testing is not possible.
+7. Reflection
+My focus changed to see the data as a real attribute. The data is not data. It has a real value. It can provide with various information.
+
+1. Class Name: Node
+Purpose and Description: This class will store the details of a node(vertex) like its value and its edges. It has various helper methods like addEdge, getNeighbors and getters and setters.
+2. Class Name: Edge
+Purpose and Description: This class will store the details of a edge. The edge is starting from which node and ending to which node. It also has helper methods like getOtherEndNode and getters and setters.
+3. Overall Design Justification
+The basic setup has been chose from the week 1 warmup assignment which we have completed at that time.
+This includes graph interface and capgraph class.
+The capgraph class implement the graph interface. and has all the methods and functions. which we are using in this project.
